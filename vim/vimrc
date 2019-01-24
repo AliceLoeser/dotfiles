@@ -1,0 +1,238 @@
+" Plugins
+let g:fzf_install = 'yes | ./install --bin'
+
+call plug#begin('~/.vim/plugins')
+
+" Common
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'scrooloose/syntastic'
+Plug 'scrooloose/nerdcommenter'
+Plug 'majutsushi/tagbar'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/fzf', { 'do': g:fzf_install }
+Plug 'jremmen/vim-ripgrep'
+Plug 'janko-m/vim-test'
+Plug 'pbrisbin/vim-mkdir'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'christoomey/vim-system-copy'
+Plug 'Yggdroot/indentline'
+Plug 'chrisbra/Colorizer'
+Plug 'easymotion/vim-easymotion'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Languages / Frameworks
+Plug 'vim-ruby/vim-ruby'
+Plug 'ngmy/vim-rubocop'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-haml'
+Plug 'slim-template/vim-slim'
+Plug 'moll/vim-node'
+Plug 'elzr/vim-json'
+Plug 'elixir-lang/vim-elixir'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'dag/vim-fish'
+Plug 'rhysd/vim-crystal'
+Plug 'cespare/vim-toml'
+
+call plug#end()
+
+
+set background=dark
+set guioptions-=r
+set guioptions-=L
+set number
+set ruler
+
+" Write swap and backup files in the event of a crash or accident
+set swapfile
+set directory=$TMPDIR,~/tmp,~/.vim/tmp,/tmp,/var/tmp
+set backup
+set backupdir=$TMPDIR,~/tmp,~/.vim/tmp,/tmp,/var/tmp
+
+" Backspace MacOS Sierra
+set backspace=indent,eol,start
+
+" Tabs
+autocmd FileType ruby       setlocal shiftwidth=2 softtabstop=2
+autocmd FileType eruby      setlocal shiftwidth=2 softtabstop=2
+autocmd FileType crystal    setlocal shiftwidth=2 softtabstop=2
+autocmd FileType yaml       setlocal shiftwidth=2 softtabstop=2
+autocmd FileType haml       setlocal shiftwidth=2 softtabstop=2
+autocmd FileType toml       setlocal shiftwidth=2 softtabstop=2
+autocmd FileType slim       setlocal shiftwidth=2 softtabstop=2
+autocmd FileType json       setlocal shiftwidth=2 softtabstop=2
+autocmd FileType scss       setlocal shiftwidth=2 softtabstop=2
+autocmd FileType vim        setlocal shiftwidth=2 softtabstop=2
+autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2
+
+" Show whitespaces
+
+" Leader key
+let mapleader=","
+
+" Search
+set hlsearch
+
+" Options
+set nocompatible      " We're running Vim, not Vi!
+syntax on             " Enable syntax highlighting
+filetype on           " Enable filetype detection
+filetype indent on    " Enable filetype-specific indenting
+filetype plugin on    " Enable filetype-specific plugins
+
+" Ruby
+autocmd FileType ruby compiler ruby
+
+" Custom syntax highlighting
+autocmd BufRead,BufNewFile Gomfile  setlocal filetype=ruby
+autocmd BufRead,BufNewFile Caskfile setlocal filetype=ruby
+autocmd BufRead,BufNewFile *.es6    setlocal filetype=javascript
+autocmd BufRead,BufNewFile *.md     setlocal filetype=markdown
+autocmd BufRead,BufNewFile *.docker setlocal filetype=dockerfile
+autocmd BufRead,BufNewFile *.slim   setlocal filetype=slim
+autocmd BufRead,BufNewFile *.vim    setlocal filetype=viml
+autocmd BufRead,BufNewFile vifmrc   setlocal filetype=viml
+
+" Remove trailing whitespaces on save
+set wrap
+set linebreak
+autocmd BufWritePre * :%s/\s\+$//e
+
+" Tagbar
+nmap <F9> :TagbarToggle<CR>
+
+" Split panes
+nnoremap <C-H> <C-W><C-H>
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+
+" Fuzzy finder
+nmap <C-P> :FZF<CR>
+
+" Search
+nmap <C-F> :Rg<space>""<Left>
+
+" Tests
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>f :TestFile<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>v :TestVisit<CR>
+
+let test#strategy = "tslime"
+
+" Tmux command
+nmap <leader>c :Tmux<space>""<Left>
+
+" Shell
+set shell=/bin/bash
+
+" Fix display
+set t_ut=
+
+" Tabline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+" Customize fzf colors to match color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+\ 'bg':      ['bg', 'Normal'],
+\ 'hl':      ['fg', 'Comment'],
+\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+\ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+\ 'hl+':     ['fg', 'Statement'],
+\ 'info':    ['fg', 'PreProc'],
+\ 'border':  ['fg', 'Ignore'],
+\ 'prompt':  ['fg', 'Conditional'],
+\ 'pointer': ['fg', 'Exception'],
+\ 'marker':  ['fg', 'Keyword'],
+\ 'spinner': ['fg', 'Label'],
+\ 'header':  ['fg', 'Comment'] }
+
+" Fzf keybindings
+let g:fzf_action = {
+\ 'ctrl-t': 'tab split',
+\ 'ctrl-s': 'split',
+\ 'ctrl-v': 'vsplit' }
+
+" Disable arrow keys
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+" Easymotion
+let g:EasyMotion_leader_key = ';'
+
+" Open
+function! Open(target)
+call system('xdg-open ' . a:target)
+endfunction
+
+" Markdown Preview
+function! Preview_Markdown()
+let s:preview_cmd = 'grip ' . resolve(expand('%:p')) . ' 127.0.0.1'
+
+call Send_keys_to_Tmux('c-c')
+call Send_to_Tmux(s:preview_cmd)
+call Send_keys_to_Tmux('Enter')
+call Open('http://127.0.0.1:6419')
+endfunction
+
+noremap <leader>e :call Preview_Markdown()<CR>
+
+" Buffers handling
+function! ClearBuffers()
+w | %bd | e#
+endfunction
+command! B :call ClearBuffers()
+
+" Rename file
+function! RenameFile()
+let old_name = expand('%')
+let new_name = input('New file name: ', expand('%'), 'file')
+if new_name != '' && new_name != old_name
+  exec ':saveas ' . new_name
+  exec ':silent !rm ' . old_name
+  redraw!
+endif
+endfunction
+command! RF :call RenameFile()
+
+" Delete temp files
+function! DeleteTempFiles()
+call system('rm $HOME/.vim/tmp/backup/*')
+call system('rm $HOME/.vim/tmp/undo/*')
+call system('rm $HOME/.vim/tmp/swap/*')
+endfunction
+command! DTF :call DeleteTempFiles()
+
+" Make file executable
+function! MakeExecutable()
+let filename = expand('%:p')
+
+call system('chmod +x ' . filename)
+endfunction
+command! ME :call MakeExecutable()
+
+:highlight ExtraWhitespace ctermbg=red guibg=red
+:autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\\t/
+
+highlight OverLength ctermfg=gray
+match OverLength /\%101v.\+/
+
+inoremap jk <Esc>
+
+" fzf
+
+
+set wildmenu
+set wildmode=longest:full,full
+
+" nerdtree
+map <C-n> :NERDTreeToggle<CR>
