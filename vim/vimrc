@@ -1,27 +1,19 @@
-" Plugins
-let g:fzf_install = 'yes | ./install --bin'
 
 call plug#begin('~/.vim/plugins')
 
+
 " Common
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'scrooloose/syntastic'
-Plug 'scrooloose/nerdcommenter'
-Plug 'majutsushi/tagbar'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'junegunn/fzf', { 'do': g:fzf_install }
+Plug 'junegunn/fzf'
 Plug 'jremmen/vim-ripgrep'
-Plug 'janko-m/vim-test'
-Plug 'pbrisbin/vim-mkdir'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'christoomey/vim-system-copy'
 Plug 'Yggdroot/indentline'
 Plug 'chrisbra/Colorizer'
 Plug 'easymotion/vim-easymotion'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'AndrewRadev/splitjoin.vim'
 
 " Languages / Frameworks
@@ -29,15 +21,15 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'ngmy/vim-rubocop'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
+Plug 'tpope/vim-commentary'
 Plug 'vim-ruby/vim-ruby'
 Plug 'slim-template/vim-slim'
 Plug 'moll/vim-node'
 Plug 'elzr/vim-json'
-Plug 'elixir-lang/vim-elixir'
 Plug 'jelera/vim-javascript-syntax'
 Plug 'dag/vim-fish'
-Plug 'rhysd/vim-crystal'
 Plug 'cespare/vim-toml'
+Plug 'fatih/vim-go'
 
 " Pretty
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -62,6 +54,7 @@ set backspace=indent,eol,start
 
 " Tabs
 autocmd FileType ruby       setlocal shiftwidth=2 softtabstop=2 ts=2
+autocmd FileType proto      setlocal shiftwidth=2 softtabstop=2 ts=2
 autocmd FileType eruby      setlocal shiftwidth=2 softtabstop=2 ts=2
 autocmd FileType crystal    setlocal shiftwidth=2 softtabstop=2 ts=2
 autocmd FileType yaml       setlocal shiftwidth=2 softtabstop=2 ts=2
@@ -72,6 +65,8 @@ autocmd FileType json       setlocal shiftwidth=2 softtabstop=2 ts=2
 autocmd FileType scss       setlocal shiftwidth=2 softtabstop=2 ts=2
 autocmd FileType vim        setlocal shiftwidth=2 softtabstop=2 ts=2
 autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 ts=2
+autocmd FileType groovy setlocal shiftwidth=2 softtabstop=2 ts=2
+autocmd FileType js setlocal shiftwidth=2 softtabstop=2 ts=2
 
 " Show whitespaces
 
@@ -99,6 +94,7 @@ autocmd BufRead,BufNewFile *.md     setlocal filetype=markdown
 autocmd BufRead,BufNewFile *.docker setlocal filetype=dockerfile
 autocmd BufRead,BufNewFile *.slim   setlocal filetype=slim
 autocmd BufRead,BufNewFile *.vim    setlocal filetype=viml
+autocmd BufRead,BufNewFile *.proto  setlocal filetype=proto
 autocmd BufRead,BufNewFile vifmrc   setlocal filetype=viml
 
 " Remove trailing whitespaces on save
@@ -119,18 +115,7 @@ nnoremap <C-L> <C-W><C-L>
 nmap <C-P> :FZF<CR>
 
 " Search
-nmap <C-F> :Rg<space>""<Left>
-
-" Tests
-nmap <silent> <leader>t :TestNearest<CR>
-nmap <silent> <leader>f :TestFile<CR>
-nmap <silent> <leader>l :TestLast<CR>
-nmap <silent> <leader>v :TestVisit<CR>
-
-let test#strategy = "tslime"
-
-" Tmux command
-nmap <leader>c :Tmux<space>""<Left>
+nmap <C-F> :Rg<space>-F<space>-i<space>""<Left>
 
 " Shell
 set shell=/bin/bash
@@ -179,16 +164,6 @@ function! Open(target)
 call system('xdg-open ' . a:target)
 endfunction
 
-" Markdown Preview
-function! Preview_Markdown()
-let s:preview_cmd = 'grip ' . resolve(expand('%:p')) . ' 127.0.0.1'
-
-call Send_keys_to_Tmux('c-c')
-call Send_to_Tmux(s:preview_cmd)
-call Send_keys_to_Tmux('Enter')
-call Open('http://127.0.0.1:6419')
-endfunction
-
 noremap <leader>e :call Preview_Markdown()<CR>
 
 " Buffers handling
@@ -228,22 +203,9 @@ command! ME :call MakeExecutable()
 :highlight ExtraWhitespace ctermbg=red guibg=red
 :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\\t/
 
-highlight OverLength ctermfg=gray
-match OverLength /\%101v.\+/
-
 inoremap jk <Esc>
-
-" fzf
-
 
 set wildmenu
 set wildmode=longest:full,full
 
-" nerdtree
-map <C-n> :NERDTreeToggle<CR>
-
 noremap <Leader>Y "+y
-
-" turn hybrid line numbers on
-:set number relativenumber
-:set nu rnu
